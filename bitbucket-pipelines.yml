@@ -1,0 +1,10 @@
+ pipelines:
+  default:
+   - step:
+       script:
+          - echo "SP Code Analysis Check started!"
+          - curl --insecure -OL https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/$MB_ANALYSIS_SERVER_PACKAGE_VERSION.zip
+          - unzip $MB_ANALYSIS_SERVER_PACKAGE_VERSION.zip
+          - mvn install 
+          - ./$MB_ANALYSIS_SERVER_PACKAGE_NAME/bin/sonar-scanner -Dsonar.host.url=$SP_HOST -Dsonar.login=$SP_SERVER_KEY -Dsonar.branch=$BITBUCKET_BRANCH -Dsonar.sources=$BITBUCKET_CLONE_DIR/. -Dsonar.analysis.mode=publish -Dsonar.projectKey=codegrip-java -Dsonar.jacoco.reportPaths=target/jacoco.exec -Dsonar.java.coveragePlugin=jacoco -Dsonar.java.binaries=.
+           -Dsonar.dynamicAnalysis=reuseReports -Dsonar.junit.reportPaths=target/surefire-reports -Dsonar.projectName=codegrip-java
